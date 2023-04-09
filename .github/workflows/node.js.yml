@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         node: [ 16 ]
-    - name: Node ${{ matrix.node }} sample
+    name: Node ${{ matrix.node }} sample
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
@@ -23,12 +23,12 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-    - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v3.2.0
-      env:
-        CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-      with:
-        coverageCommand: npm test
-        coverageLocations: |
-          ${{github.workspace}}/client/coverage/lcov.info:lcov
-          ${{github.workspace}}/server/coverage/lcov.info:lcov
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.2.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+        with:
+          coverageCommand: npm test
+          coverageLocations: |
+            ${{github.workspace}}/client/coverage/lcov.info:lcov
+            ${{github.workspace}}/server/coverage/lcov.info:lcov

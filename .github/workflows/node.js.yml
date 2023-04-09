@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         platform: [ ubuntu-latest, macOS-latest ]
-        node: [ '16' ]
+        node: [ '14', '12' ]
     name: test/node ${{ matrix.node }}/${{ matrix.platform }}
     runs-on: ${{ matrix.platform }}
     steps:
@@ -26,8 +26,10 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node }}
-    - run: npm install
-    - run: npm test
+    - run: npm install -g yarn
+    - run: yarn install
+    - run: yarn build
+    - run: yarn test
   coverage:
     needs: [ test ]
     name: coverage
@@ -36,10 +38,13 @@ jobs:
     - uses: actions/checkout@master
     - uses: actions/setup-node@master
       with:
-        node-version: '16'
-    - run: npm install
-    - uses: paambaati/codeclimate-action@v2.2.4
+        node-version: '12'
+    - run: npm install -g yarn
+    - run: yarn install
+    - run: yarn build
+    - uses: paambaati/codeclimate-action@v3.0.0
       env:
-        CC_TEST_REPORTER_ID: 945dfb58a832d233a3caeb84e3e6d3be212e8c7abcb48117fce63b9adcb43647
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
-        coverageCommand: npm test
+        coverageCommand: yarn run coverage
+        debug: true

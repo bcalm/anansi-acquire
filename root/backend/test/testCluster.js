@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const sinon = require('sinon');
-const Cluster = require('../lib/models/cluster');
+const Cluster = require('../src/models/cluster');
 
 describe('Cluster', function() {
   describe('createTiles', () => {

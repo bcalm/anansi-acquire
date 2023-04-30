@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const Corporate = require('../lib/models/corporate.js');
+const Corporate = require('../src/models/corporate.js');
 
 describe('Corporate', function() {
   describe('status', function() {

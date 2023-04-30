@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const sinon = require('sinon');
-const Game = require('../lib/models/game');
+const Game = require('../src/models/game');
 
 describe('Game', () => {
   before(() => {

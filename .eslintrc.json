@@ -35,7 +35,10 @@
     "handle-callback-err": "error",
     "id-length": "error",
     "key-spacing": "error",
-    "max-len": "error",
+    "max-len": ["error",
+      {
+        "code": 120
+      }],
     "max-params": [
       "error",
       {
@@ -48,7 +51,7 @@
     "no-eval": "error",
     "no-implicit-globals": "error",
     "prefer-const": "error",
-    "no-magic-numbers": "error",
+    "no-magic-numbers": "warn",
     "no-process-exit": "error",
     "no-process-env": "error",
     "no-return-assign": "error",

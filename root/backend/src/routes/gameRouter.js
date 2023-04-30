@@ -11,11 +11,11 @@ const {
   skipAction,
   buyStocks,
   replaceTiles
-} = require('./handlers');
+} = require('../handler/handlers');
 
 const gameRouter = express();
 gameRouter.use(redirectToPlayerLocation);
-gameRouter.use(express.static('private'));
+gameRouter.use(express.static('root/frontend/private'));
 gameRouter.get('/waiting', serveWaitingPage);
 gameRouter.get('/wait', serveWaitStatus);
 gameRouter.get('/start', serveStartGame);

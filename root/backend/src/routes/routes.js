@@ -8,7 +8,7 @@ const {
   redirectToGame,
   findPlayerWithGame,
   hasFields
-} = require('./handlers');
+} = require('../handler/handlers');
 
 const app = express();
 
@@ -20,9 +20,10 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(findPlayerWithGame);
-app.get([/\/$/, '/hostPage.html', '/join.html'], redirectToGame);
+app.get([/\/$/, '/root/frontend/public/host.html',
+  '/root/frontend/public/join.html'], redirectToGame);
 app.use('/game', gameRouter);
-app.use(express.static('public'));
+app.use(express.static('root/frontend/public'));
 app.post('/joinGame', hasFields('name', 'gameId'), joinGame);
 app.post('/hostGame', hasFields('name', 'noOfPlayers'), createGame);
 

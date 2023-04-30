@@ -103,7 +103,7 @@ describe('GET', () => {
         2: {gameId: 1, playerId: 3, location: '/waiting'}
       };
       request(app)
-        .get('/Users/bcalm/anansi-acquire/root/frontend/public/join.html')
+        .get('/root/frontend/public/join.html')
         .set('Cookie', 'sessionId=2')
         .expect(302)
         .expect('Location', '/game/waiting', done);

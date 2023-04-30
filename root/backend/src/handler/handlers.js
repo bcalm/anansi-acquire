@@ -2,7 +2,7 @@ const fs = require('fs');
 const Game = require('../models/game.js');
 const NUMBER = 1;
 
-const waitPage = fs.readFileSync('/Users/bcalm/anansi-acquire/root/frontend/private/wait.html', 'utf8');
+const waitPage = fs.readFileSync('root/frontend/private/wait.html', 'utf8');
 
 const hasFields = (...fields) => {
   return (req, res, next) => {

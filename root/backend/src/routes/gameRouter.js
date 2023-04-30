@@ -15,7 +15,7 @@ const {
 
 const gameRouter = express();
 gameRouter.use(redirectToPlayerLocation);
-gameRouter.use(express.static('/Users/bcalm/anansi-acquire/root/frontend/private'));
+gameRouter.use(express.static('root/frontend/private'));
 gameRouter.get('/waiting', serveWaitingPage);
 gameRouter.get('/wait', serveWaitStatus);
 gameRouter.get('/start', serveStartGame);

@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const ActivityLog = require('../src/models/activityLog.js');
+const ActivityLog = require('../../src/models/activityLog.js');
 
 describe('ActivityLog', () => {
   describe('addLog', () => {

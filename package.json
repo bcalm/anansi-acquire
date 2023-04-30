@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node root/backend/src/server.js",
-    "test": "istanbul cover _mocha root/backend/test/*.js --report lcovonly -- -R spec && istanbul report --dir ./coverage lcov",
+    "test": "istanbul cover _mocha root/backend/test/*/*.js --report lcovonly -- -R spec && istanbul report --dir ./coverage lcov",
     "linterTest": "eslint ./root/backend/",
     "allTests": "npm test && npm run linterTest",
     "stage": "git push https://git.heroku.com/stage-anansi-acquire.git master"

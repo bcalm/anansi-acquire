@@ -1,14 +1,14 @@
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const {gameRouter} = require('./gameRouter');
+const {gameRouter} = require('./game');
 const {
   joinGame,
   createGame,
   redirectToGame,
   findPlayerWithGame,
   hasFields
-} = require('../handler/handlers');
+} = require('../handler/appHandler');
 
 const app = express();
 

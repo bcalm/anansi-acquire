@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const Player = require('../lib/models/player');
+const Player = require('../src/models/player');
 
 describe('Player', () => {
   describe('getId', () => {

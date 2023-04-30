@@ -1,5 +1,5 @@
 const request = require('supertest');
-const {app} = require('../lib/routes');
+const {app} = require('../src/routes/routes');
 
 describe('GET', () => {
   describe('/index.html', () => {
@@ -103,7 +103,7 @@ describe('GET', () => {
         2: {gameId: 1, playerId: 3, location: '/waiting'}
       };
       request(app)
-        .get('/join.html')
+        .get('/Users/bcalm/anansi-acquire/root/frontend/public/join.html')
         .set('Cookie', 'sessionId=2')
         .expect(302)
         .expect('Location', '/game/waiting', done);

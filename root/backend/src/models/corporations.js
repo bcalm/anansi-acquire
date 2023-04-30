@@ -1,7 +1,7 @@
 const Corporate = require('./corporate');
 
 class Corporations {
-  constructor(){
+  constructor() {
     this.phoenix = Corporate.create('phoenix');
     this.quantum = Corporate.create('quantum');
     this.hydra = Corporate.create('hydra');
@@ -10,41 +10,41 @@ class Corporations {
     this.sackson = Corporate.create('sackson');
     this.zeta = Corporate.create('zeta');
   }
-  
-  getMajorityOfCorp(corporate){
+
+  getMajorityOfCorp(corporate) {
     return this[corporate].majority;
   }
 
-  getMinorityOfCorp(corporate){
+  getMinorityOfCorp(corporate) {
     return this[corporate].minority;
   }
 
-  removeStocks(corporate, numOfStocks){
+  removeStocks(corporate, numOfStocks) {
     return this[corporate].removeStocks(numOfStocks);
   }
 
-  getAreaOfCorp(corporate){
+  getAreaOfCorp(corporate) {
     return this[corporate].area;
   }
 
   isStable(corporate) {
     return this[corporate].stable;
   }
-  
-  getCorporateStocksPrice(corporate){
+
+  getCorporateStocksPrice(corporate) {
     return this[corporate] && this[corporate].price;
   }
 
-  establishCorporate(corporate, tiles){
+  establishCorporate(corporate, tiles) {
     const isNotActive = !this[corporate].activeStatus;
-    if(isNotActive){
+    if (isNotActive) {
       this[corporate].establish(tiles);
     }
     return isNotActive;
   }
 
-  mergeCorporate(bigCorp, smallCorp, mergerTile){
-    if(!this[smallCorp].stableStatus){
+  mergeCorporate(bigCorp, smallCorp, mergerTile) {
+    if (!this[smallCorp].stableStatus) {
       const {tiles, majority, minority} = this[smallCorp].defunct();
       this[bigCorp].addTiles(tiles);
       this[bigCorp].addTiles(mergerTile);
@@ -53,29 +53,29 @@ class Corporations {
     return {isMerged: false};
   }
 
-  getInactiveCorporate(){
+  getInactiveCorporate() {
     const inactiveCorporate = [];
     const corpStatus = this.status;
-    for (const corp in corpStatus){
-      if(!corpStatus[corp].isActive){
+    for (const corp in corpStatus) {
+      if (!corpStatus[corp].isActive) {
         inactiveCorporate.push(corp);
       }
     }
     return inactiveCorporate;
   }
 
-  getActiveCorporate(){
+  getActiveCorporate() {
     const activeCorporate = [];
     const corpStatus = this.status;
-    for (const corp in corpStatus){
-      if(corpStatus[corp].isActive){
+    for (const corp in corpStatus) {
+      if (corpStatus[corp].isActive) {
         activeCorporate.push(corp);
       }
     }
     return activeCorporate;
   }
 
-  addTiles(corporate, tiles){
+  addTiles(corporate, tiles) {
     this[corporate].addTiles(tiles);
   }
 

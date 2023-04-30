@@ -18,7 +18,7 @@ const initialPrice = {
   quantum: 400
 };
 
-const createPriceList = function(corp) {
+const createPriceList = function (corp) {
   let price = initialPrice[corp];
   const priceList = [0, 0];
   const maxPriceArea = 108;

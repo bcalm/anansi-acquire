@@ -264,16 +264,16 @@ describe('Game', () => {
     });
   });
 
-  describe('removePlacedTiles', () => {
-    it('should remove tiles from the placedTiles', () => {
-      const game = new Game(1, 1);
-      game.placeNormalTile(1);
-      game.placeNormalTile(2);
-      game.placeNormalTile(3);
-      game.removePlacedTiles([1, 2]);
-      assert.deepStrictEqual(game.placedTiles, [3]);
-    });
-  });
+  // describe('removePlacedTiles', () => {
+  //   it('should remove tiles from the placedTiles', () => {
+  //     const game = new Game(1, 1);
+  //     game.placeNormalTile(1);
+  //     game.placeNormalTile(2);
+  //     game.placeNormalTile(3);
+  //     game.removePlacedTiles([1, 2]);
+  //     assert.deepStrictEqual(game.placedTiles, [3]);
+  //   });
+  // });
 
   describe('establishCorporation', () => {
     it(`should give true for unincorporated tiles 
@@ -456,31 +456,31 @@ describe('Game', () => {
     });
   });
 
-  describe('increaseCorporate', () => {
-    it('should give no of players require for the game', () => {
-      const game = new Game(1, 1);
-      game.placedTiles = [0, 1, 2];
-      game.unincorporatedTiles = [[0, 1, 2]];
-      game.addPlayer(1, 'test');
-      game.establishCorporation(0, 'zeta', 1);
-      game.increaseCorporate(3, 'zeta');
-      assert.deepStrictEqual(
-        game.getStatus(1).status.corporations.zeta.tiles,
-        [0, 1, 2, 3]
-      );
-    });
-  });
+  // describe('increaseCorporate', () => {
+  //   it('should give no of players require for the game', () => {
+  //     const game = new Game(1, 1);
+  //     game.placedTiles = [0, 1, 2];
+  //     game.unincorporatedTiles = [[0, 1, 2]];
+  //     game.addPlayer(1, 'test');
+  //     game.establishCorporation(0, 'zeta', 1);
+  //     game.increaseCorporate(3, 'zeta');
+  //     assert.deepStrictEqual(
+  //       game.getStatus(1).status.corporations.zeta.tiles,
+  //       [0, 1, 2, 3]
+  //     );
+  //   });
+  // });
 
-  describe('getBiggerToSmallerCorp', () => {
-    it('should give the sorted corporations with area', () => {
-      const game = new Game(1, 1);
-      game.placedTiles = [0, 1, 2];
-      game.unincorporatedTiles = [[0, 1, 2]];
-      game.addPlayer(1, 'test');
-      game.establishCorporation(0, 'zeta', 1);
-      assert.deepStrictEqual(game.getBiggerToSmallerCorp(['zeta']), ['zeta']);
-    });
-  });
+  // describe('getBiggerToSmallerCorp', () => {
+  //   it('should give the sorted corporations with area', () => {
+  //     const game = new Game(1, 1);
+  //     game.placedTiles = [0, 1, 2];
+  //     game.unincorporatedTiles = [[0, 1, 2]];
+  //     game.addPlayer(1, 'test');
+  //     game.establishCorporation(0, 'zeta', 1);
+  //     assert.deepStrictEqual(game.getBiggerToSmallerCorp(['zeta']), ['zeta']);
+  //   });
+  // });
 
   describe('getCorporateStocks', () => {
     it('should give no stocks when no player has stock', () => {

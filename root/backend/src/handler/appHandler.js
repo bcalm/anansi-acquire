@@ -1,4 +1,5 @@
 const Game = require('../models/game.js');
+const GameService = require('../service/GameService');
 
 const hasFields = (...fields) => {
   return (req, res, next) => {
@@ -63,11 +64,13 @@ const getPlayerId = generateSequence(initialPlayerId);
 const createGame = function(req, res) {
   const { name, noOfPlayers } = req.body;
   const { sessions, games } = req.app.locals;
-  const gameId = generateGameId(games);
-  const sessionId = generateSessionId(sessions);
+  const gameId = generateGameId();
+  const sessionId = generateSessionId();
   const id = getPlayerId();
-  games[gameId] = new Game(gameId, +noOfPlayers);
-  games[gameId].addPlayer(id, name);
+  const game = new Game(gameId, +noOfPlayers);
+  games[gameId] = game;
+  const gameService = new GameService(game);
+  gameService.addPlayer(id, name);
   sessions[sessionId] = { gameId, playerId: id, location: '/waiting' };
   res.cookie('sessionId', sessionId);
   res.redirect('game/waiting');

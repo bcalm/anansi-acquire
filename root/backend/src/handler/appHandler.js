@@ -14,8 +14,9 @@ const hasFields = (...fields) => {
 const addPlayer = function(req, res, game, sessions) {
   const { gameId, name } = req.body;
   const id = getPlayerId();
-  const sessionId = generateSessionId(sessions);
-  game.addPlayer(id, name);
+  const sessionId = generateSessionId();
+  const gameService = new GameService(game);
+  gameService.addPlayer(id, name);
   sessions[sessionId] = { gameId, playerId: id, location: '/waiting' };
   res.cookie('sessionId', sessionId).json({ isAnyError: false });
 };
@@ -27,7 +28,8 @@ const joinGame = function(req, res) {
   if (!game) {
     return res.json({ isAnyError: true, msg: 'Invalid game id' });
   }
-  if (game.hasAllPlayerJoined()) {
+  const gameService = new GameService(game);
+  if (gameService.hasAllPlayerJoined()) {
     return res.json({ isAnyError: true, msg: 'The game has already started' });
   }
   addPlayer(req, res, game, sessions);
@@ -66,9 +68,9 @@ const createGame = function(req, res) {
   const { sessions, games } = req.app.locals;
   const gameId = generateGameId();
   const sessionId = generateSessionId();
-  const id = getPlayerId();
   const game = new Game(gameId, +noOfPlayers);
   games[gameId] = game;
+  const id = getPlayerId();
   const gameService = new GameService(game);
   gameService.addPlayer(id, name);
   sessions[sessionId] = { gameId, playerId: id, location: '/waiting' };

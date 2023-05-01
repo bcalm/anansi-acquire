@@ -73,6 +73,10 @@ class GameService {
       return this.game.started;
     }
   }
+
+  getStatus(playerId) {
+    return this.game.getStatus(playerId);
+  }
 }
 
 module.exports = GameService;

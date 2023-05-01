@@ -64,7 +64,8 @@ const establishCorporation = function(req, res, next) {
 
 const getGameStatus = function(req, res) {
   const { playerId } = req.player;
-  res.json(req.game.getStatus(playerId));
+  const gameService = new GameService(req.game);
+  res.json(gameService.getStatus(playerId));
 };
 
 const skipAction = function(req, res) {

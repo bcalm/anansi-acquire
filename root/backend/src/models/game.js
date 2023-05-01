@@ -1,9 +1,8 @@
 const lodash = require('lodash');
-const Player = require('./player');
 const ActivityLog = require('./activityLog');
 const Cluster = require('./cluster');
 const Corporations = require('./corporations');
-const {getAdjacentTiles} = require('../utils/tiles');
+const {getAdjacentTiles, tileGenerator} = require('../utils/tiles');
 const {getAdjacentCorporate, getCorporationsInDescOrder} = require('../service/corporateService');
 const {getAdjacentPlacedTileList, removePlacedTiles, increaseCorporate} = require('../service/tileService');
 const {buyStocks} = require('../service/stockService');
@@ -16,17 +15,6 @@ const getGroups = function(groups, tiles) {
   }
   tiles.length > 1 && groups.push(tiles);
   return groups;
-};
-
-const tileGenerator = function(num) {
-  const firstCharCode = 64;
-  const columnNo = 12;
-  let number = num % columnNo;
-  number++;
-  let increment = Math.floor(num / columnNo);
-  increment++;
-  const alphabet = String.fromCharCode(firstCharCode + increment);
-  return `${number}${alphabet}`;
 };
 
 const getMaxAndSecondMaxNumbers = function(numbers) {
@@ -64,11 +52,6 @@ class Game {
     return this.cluster;
   }
 
-  //only for test
-  addPlayer(id, name) {
-    this.players.push(new Player(id, name, this.cluster.getRandomTiles(6)));
-  }
-
   get currentPlayer() {
     return this.players[this.currentPlayerNo];
   }
@@ -77,7 +60,7 @@ class Game {
     const msg = 'It is your turn, place a tile';
     this.currentPlayer.statusMsg = msg;
   }
-  
+
   setCurrentPlayerState() {
     let state = 'placeTile';
     this.currentPlayer.toggleTurn();
@@ -89,22 +72,9 @@ class Game {
     }
     this.currentPlayer.state = state;
   }
-  
-  start() {
-    this.decideOrder();
-    this.started = true;
-    this.setCurrentPlayerState();
-    this.setCurrentPlayerStatus();
-    this.addInitialActivity();
-    return this.started;
-  }
 
   get hasStarted() {
     return this.started;
-  }
-  // only for test
-  hasAllPlayerJoined() {
-    return this.players.length === this.noOfPlayers;
   }
   
   setPlayerStateAsBuyStocks(state) {
@@ -141,18 +111,12 @@ class Game {
     this.activityLog.addLog('tilePlaced', 'Initial tile placed');
     this.activityLog.addLog('turn', `${this.currentPlayer.playerName}'s turn`);
   }
-
-  decideOrder() {
-    const tiles = this.cluster.getRandomTiles(this.noOfPlayers);
-    const tilePlayerPair = lodash.zip(tiles, this.players);
-    tilePlayerPair.forEach(([tile, player]) => {
-      const text = `${player.playerName} got ${tileGenerator(tile)}`;
-      this.activityLog.addLog('gotTile', text);
-    });
-    const orderedPair = tilePlayerPair.sort(([t1], [t2]) => t1 - t2);
-    const [orderedTiles, orderedPlayers] = lodash.unzip(orderedPair);
+  setPlacedTiles(orderedTiles) {
     this.placedTiles = this.placedTiles.concat(orderedTiles);
-    this.players = orderedPlayers;
+  }
+
+  setPlayers(players) {
+    this.players = players;
   }
 
   updateActivityForTilePlaced(tile) {

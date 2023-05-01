@@ -16,6 +16,18 @@ const getAdjacentTiles = function(placed, tile) {
   return adjTiles.filter(num => num >= TILE_INITIAL_POSITION && num < TOTAL_TILES && placed.includes(num));
 };
 
+const tileGenerator = function(num) {
+  const firstCharCode = 64;
+  const columnNo = 12;
+  let number = num % columnNo;
+  number++;
+  let increment = Math.floor(num / columnNo);
+  increment++;
+  const alphabet = String.fromCharCode(firstCharCode + increment);
+  return `${number}${alphabet}`;
+};
+
 module.exports = {
-  getAdjacentTiles
+  getAdjacentTiles,
+  tileGenerator
 };

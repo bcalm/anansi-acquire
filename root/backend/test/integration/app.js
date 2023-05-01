@@ -174,11 +174,24 @@ describe('GET', () => {
       };
       app.locals.games = {
         1441: {
-          getPlayers: () => ['ram', 'sita', 'laxman'],
+          getPlayers: () => [
+            {playerName: 'ram'},
+            {playerName: 'anu'},
+            {playerName: 'sid'}],
+          getClusters: () => ({
+            getRandomTiles: () => [1, 2, 3]
+          }),
           requiredPlayers: 3,
           hasStarted: false,
-          start: () => {
-          }
+          activityLog: {
+            addLog: () => {}
+          },
+          setPlacedTiles: () => {},
+          setPlayers: () => {},
+          currentPlayer: {
+            toggleTurn: () => {}
+          },
+          isAnyUnplayableTile: () => false
         }
       };
 

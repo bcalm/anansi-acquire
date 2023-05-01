@@ -11,7 +11,14 @@ const updateActivityForMerge = (mergeMaker, bigCorp, smallCorp, activityLog) => 
   activityLog.addLog('merge', mergeMsg);
 };
 
+const addInitialActivity = (activityLog, playerName) => {
+  activityLog.addLog('order', 'Order decide based on initial tiles');
+  activityLog.addLog('tilePlaced', 'Initial tile placed');
+  activityLog.addLog('turn', `${playerName}'s turn`);
+};
+
 module.exports = {
   updateActivityAfterBuyStocks,
-  updateActivityForMerge
+  updateActivityForMerge,
+  addInitialActivity
 };

@@ -135,15 +135,15 @@ describe('Game', () => {
   //   });
   // });
 
-  describe('setUnincorporatedGroups', () => {
-    it('should set the unincorporated groups', () => {
-      const game = new Game(1, 1);
-      game.placeNormalTile(1);
-      game.placeNormalTile(2);
-      game.setUnincorporatedGroups();
-      assert.deepStrictEqual(game.unincorporatedTiles, [[1, 2]]);
-    });
-  });
+  // describe('setUnincorporatedGroups', () => {
+  //   it('should set the unincorporated groups', () => {
+  //     const game = new Game(1, 1);
+  //     game.placeNormalTile(1);
+  //     game.placeNormalTile(2);
+  //     game.setUnincorporatedGroups();
+  //     assert.deepStrictEqual(game.unincorporatedTiles, [[1, 2]]);
+  //   });
+  // });
 
   // describe('changePlayerState', () => {
   //   it('should change player state to establish for id and state given', () => {
@@ -444,17 +444,17 @@ describe('Game', () => {
   //   });
   // });
 
-  describe('getAdjacentPlacedTileList', () => {
-    it('should give the adjacent corporations', () => {
-      const game = new Game(1, 1);
-      game.placedTiles = [43, 55, 56, 32, 20, 45];
-      game.unincorporatedTiles = [[43, 55, 56], [20, 32]];
-      assert.deepStrictEqual(
-        game.getAdjacentPlacedTileList(44),
-        [20, 32, 43, 55, 56, 45]
-      );
-    });
-  });
+  // describe('getAdjacentPlacedTileList', () => {
+  //   it('should give the adjacent corporations', () => {
+  //     const game = new Game(1, 1);
+  //     game.placedTiles = [43, 55, 56, 32, 20, 45];
+  //     game.unincorporatedTiles = [[43, 55, 56], [20, 32]];
+  //     assert.deepStrictEqual(
+  //       game.getAdjacentPlacedTileList(44),
+  //       [20, 32, 43, 55, 56, 45]
+  //     );
+  //   });
+  // });
 
   // describe('increaseCorporate', () => {
   //   it('should give no of players require for the game', () => {

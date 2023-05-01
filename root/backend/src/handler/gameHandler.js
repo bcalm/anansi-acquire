@@ -48,8 +48,10 @@ const redirectToPlayerLocation = function(req, res, next) {
 
 const placeATile = function(req, res, next) {
   const { tile } = req.body;
-  if (req.game.placeATile(tile, req.player.playerId)) {
-    return res.json(req.game.getStatus(req.player.playerId));
+  const gameService = new GameService(req.game);
+  const isTilePlaced = gameService.placeATile(tile, req.player.playerId);
+  if (isTilePlaced) {
+    return res.json(gameService.getStatus(req.player.playerId));
   }
   next();
 };

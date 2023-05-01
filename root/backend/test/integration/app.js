@@ -174,6 +174,10 @@ describe('GET', () => {
       };
       app.locals.games = {
         1441: {
+          currentPlayer: {
+            toggleTurn: () => {},
+            playerName: 'ram'
+          },
           getPlayers: () => [
             {playerName: 'ram'},
             {playerName: 'anu'},
@@ -188,9 +192,6 @@ describe('GET', () => {
           },
           setPlacedTiles: () => {},
           setPlayers: () => {},
-          currentPlayer: {
-            toggleTurn: () => {}
-          },
           isAnyUnplayableTile: () => false
         }
       };
@@ -334,10 +335,31 @@ describe('POST', () => {
       it('should give status when a tile is placed by current player', done => {
         app.locals.games = {
           123: {
+            placedTiles: [],
             placeATile: () => true,
             getStatus: () => {
               return {status: 'status'};
-            }
+            },
+            corporations: {
+              getActiveCorporate: () => ['sackson'],
+              status: {
+                sackson: {tiles: ['5B', '5C', '4A', '6A']}
+              },
+              getInactiveCorporate: () => []
+            },
+            changePlayerState: () => true,
+            unincorporatedTiles: [],
+            currentPlayer: {
+              state: 'placeTile',
+              id: 3,
+              hasTile: () => true,
+              removeTile: () => {}
+            },
+            activityLog: {
+              addLog: () => {}
+            },
+
+            setUnincorporatedGroups: () => {}
           }
         };
         app.locals.sessions = {
@@ -356,10 +378,24 @@ describe('POST', () => {
       it('should not give status when tile is invalid', done => {
         app.locals.games = {
           123: {
+            currentPlayer: {
+              state: 'placeTile',
+              id: 3,
+              hasTile: () => false,
+              removeTile: () => {}
+            },
+            setUnincorporatedGroups: () => {},
             placeATile: () => false,
             getStatus: () => {
               return {status: 'status'};
-            }
+            },
+            corporations: {
+              getActiveCorporate: () => ['sackson'],
+              status: {
+                sackson: {tiles: ['5B', '5C', '4A', '6A']}
+              },
+              getInactiveCorporate: () => []
+            },
           }
         };
         app.locals.sessions = {

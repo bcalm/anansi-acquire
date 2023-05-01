@@ -39,7 +39,7 @@ class Player {
     this.statusMessage = msg;
   }
 
-  get getMoney(){
+  get getMoney() {
     return this.money;
   }
 
@@ -72,7 +72,7 @@ class Player {
     this.money += money;
   }
 
-  deductMoney(money){
+  deductMoney(money) {
     this.money -= money;
   }
 

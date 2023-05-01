@@ -45,7 +45,7 @@
         "max": 4
       }
     ],
-    "max-statements": "error",
+    "max-statements": ["error", 15],
     "no-console": "error",
     "no-else-return": "error",
     "no-eval": "error",

@@ -11,7 +11,7 @@ class Cluster {
     }
     return new Cluster(tiles);
   }
-  
+
   getRandomTiles(count) {
     let randomTiles = [];
     for (let tilesCount = 0; tilesCount < count; tilesCount++) {

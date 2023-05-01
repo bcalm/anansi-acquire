@@ -1,4 +1,4 @@
-const {app} = require('./routes/routes');
+const {app} = require('./routes/app');
 const {env} = require('process');
 const {log} = require('console');
 

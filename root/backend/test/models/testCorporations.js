@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const Corporations = require('../src/models/corporations.js');
+const Corporations = require('../../src/models/corporations.js');
 
 describe('Corporations', () => {
   describe('establishCorporate', () => {

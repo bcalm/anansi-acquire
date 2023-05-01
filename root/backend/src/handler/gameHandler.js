@@ -1,17 +1,18 @@
 const fs = require('fs');
+const GameService = require('../service/GameService');
 
 const waitPage = fs.readFileSync('root/frontend/private/wait.html', 'utf8');
 
 const serveWaitingPage = function(req, res) {
   const waitingHtml = waitPage.replace('GAME_ID', req.player.gameId);
-  const [hosted] = req.game.getPlayerNames();
+  const gameService = new GameService(req.game);
+  const [hosted] = gameService.getPlayerNames();
   res.send(waitingHtml.replace('HOSTED', hosted));
 };
 
 const serveStartGame = function(req, res) {
-  if (req.game.hasAllPlayerJoined() && !req.game.hasStarted) {
-    req.game.start();
-  }
+  const gameService = new GameService(req.game);
+  gameService.startGame();
   req.player.location = '/play.html';
   res.redirect('play.html');
 };
@@ -72,9 +73,10 @@ const skipAction = function(req, res) {
 };
 
 const serveWaitStatus = function(req, res) {
-  const hasJoined = req.game.hasAllPlayerJoined();
-  const [, ...joined] = req.game.getPlayerNames();
-  const remaining = req.game.requiredPlayers - req.game.getPlayerNames().length;
+  const gameService = new GameService(req.game);
+  const hasJoined = gameService.hasAllPlayerJoined();
+  const [, ...joined] = gameService.getPlayerNames();
+  const remaining = gameService.remainingPlayers();
   res.json({ hasJoined, joined, remaining });
 };
 

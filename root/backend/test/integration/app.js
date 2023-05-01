@@ -67,7 +67,7 @@ describe('GET', () => {
       app.locals.sessions = {
         2: {gameId: 1, playerId: 3, location: '/waiting'}
       };
-      app.locals.games = {1: {getPlayerNames: () => ['ram']}};
+      app.locals.games = {1: {getPlayers: () => ['ram']}};
       request(app)
         .get('/game/waiting')
         .set('Cookie', 'sessionId=2')
@@ -115,7 +115,11 @@ describe('GET', () => {
       app.locals.sessions = {
         2: {gameId: 1441, playerId: 3, location: '/waiting'}
       };
-      app.locals.games = {1441: {getPlayerNames: () => ['ram']}};
+      app.locals.games = {
+        1441: {
+          getPlayers: () => ['ram'],
+        }
+      };
       request(app)
         .get('/game/waiting')
         .set('Cookie', 'sessionId=2')
@@ -130,8 +134,7 @@ describe('GET', () => {
     };
     app.locals.games = {
       1441: {
-        getPlayerNames: () => ['ram'],
-        hasAllPlayerJoined: () => false,
+        getPlayers: () => ['ram'],
         requiredPlayers: 3
       }
     };
@@ -150,8 +153,8 @@ describe('GET', () => {
     };
     app.locals.games = {
       1441: {
-        getPlayerNames: () => ['ram', 'anu', 'sid'],
-        hasAllPlayerJoined: () => true,
+        getPlayers: () => [{playerName: 'ram'}, {playerName: 'anu'},
+          {playerName: 'sid'}],
         requiredPlayers: 3
       }
     };
@@ -164,17 +167,18 @@ describe('GET', () => {
       .expect(JSON.stringify(expected), done);
   });
 
-  describe('game/serveStartGame', function() {
-    it('should direct to game page if all players has joined', function(done) {
+  describe('game/serveStartGame', function () {
+    it('should direct to game page if all players has joined', function (done) {
       app.locals.sessions = {
         2: {gameId: 1441, playerId: 3, location: '/start'}
       };
       app.locals.games = {
         1441: {
-          hasAllPlayerJoined: () => true,
+          getPlayers: () => ['ram', 'sita', 'laxman'],
+          requiredPlayers: 3,
           hasStarted: false,
-          started: false,
-          start: () => {}
+          start: () => {
+          }
         }
       };
 
@@ -192,7 +196,8 @@ describe('GET', () => {
 
       app.locals.games = {
         1441: {
-          hasAllPlayerJoined: () => true,
+          getPlayers: () => ['ram', 'sita', 'laxman'],
+          requiredPlayers: 3,
           hasStarted: () => true,
         }
       };
@@ -207,7 +212,7 @@ describe('GET', () => {
 });
 
 describe('POST', () => {
-  describe('/hostGame', function() {
+  describe('/hostGame', function () {
     it('should show waiting page if user enters name and playerCount', done => {
       const body = JSON.stringify({name: 'john', noOfPlayers: '3'});
       request(app)
@@ -220,7 +225,10 @@ describe('POST', () => {
     it('should give another gameId if already a game present', done => {
       const body = JSON.stringify({name: 'john', noOfPlayers: '3'});
       app.locals.games = {
-        1234: {hasAllPlayerJoined: () => false, addPlayer: () => {}}
+        1234: {
+          hasAllPlayerJoined: () => false, addPlayer: () => {
+          }
+        }
       };
       request(app)
         .post('/hostGame')
@@ -256,7 +264,12 @@ describe('POST', () => {
       const expected = {isAnyError: false};
       const expectedJson = JSON.stringify(expected);
       app.locals.games = {
-        1234: {hasAllPlayerJoined: () => false, addPlayer: () => {}}
+        1234: {
+          getClusters: () => ({
+            getRandomTiles: () => []
+          }),
+          getPlayers: () => [], requiredPlayers: 3
+        }
       };
       request(app)
         .post('/joinGame')
@@ -284,7 +297,7 @@ describe('POST', () => {
       const body = JSON.stringify({name: 'john', gameId: '1234'});
       const expected = {isAnyError: true, msg: 'The game has already started'};
       const expectedJson = JSON.stringify(expected);
-      app.locals.games = {1234: {hasAllPlayerJoined: () => true}};
+      app.locals.games = {1234: {getPlayers: () => ['ram'], requiredPlayers: 1 }};
       request(app)
         .post('/joinGame')
         .set('Content-Type', 'application/json')
@@ -412,7 +425,8 @@ describe('POST', () => {
       it('should skip the establishing corporation', done => {
         app.locals.games = {
           123: {
-            changePlayerTurn: () => {},
+            changePlayerTurn: () => {
+            },
             getStatus: () => ({status: {player: {turn: true}}}),
             skip: () => true
           }

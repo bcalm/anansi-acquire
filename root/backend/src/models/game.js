@@ -56,6 +56,15 @@ class Game {
     return this.noOfPlayers;
   }
 
+  getPlayers() {
+    return this.players;
+  }
+
+  getClusters() {
+    return this.cluster;
+  }
+
+  //only for test
   addPlayer(id, name) {
     this.players.push(new Player(id, name, this.cluster.getRandomTiles(6)));
   }
@@ -63,14 +72,12 @@ class Game {
   get currentPlayer() {
     return this.players[this.currentPlayerNo];
   }
-
-  //playerService
+  
   setCurrentPlayerStatus() {
     const msg = 'It is your turn, place a tile';
     this.currentPlayer.statusMsg = msg;
   }
-
-  //playerService
+  
   setCurrentPlayerState() {
     let state = 'placeTile';
     this.currentPlayer.toggleTurn();
@@ -82,8 +89,7 @@ class Game {
     }
     this.currentPlayer.state = state;
   }
-
-  //GameService
+  
   start() {
     this.decideOrder();
     this.started = true;
@@ -96,20 +102,18 @@ class Game {
   get hasStarted() {
     return this.started;
   }
-
+  // only for test
   hasAllPlayerJoined() {
     return this.players.length === this.noOfPlayers;
   }
-
-  //playerService
+  
   setPlayerStateAsBuyStocks(state) {
     if (state === 'establish' || state === 'no-corp') {
       const msg = 'You can buy stocks';
       this.changePlayerState('buyStocks', msg);
     }
   }
-
-  // GameService && PlayerService
+  
   skip(playerId) {
     if (this.currentPlayer.id === playerId) {
       const state = this.currentPlayer.state;
@@ -120,29 +124,24 @@ class Game {
     }
     return this.getStatus(playerId);
   }
-
-  //PlayerService
+  
   changePlayerTurn() {
     this.currentPlayer.addTile(this.cluster.getRandomTiles(1).pop());
     this.currentPlayer.toggleTurn();
     this.currentPlayer.state = 'wait';
     this.currentPlayer.statusMsg = 'Wait for your turn';
     this.currentPlayerNo = ++this.currentPlayerNo % this.noOfPlayers;
-    // this.currentPlayer.toggleTurn();
     this.setCurrentPlayerStatus();
     this.activityLog.addLog('turn', `${this.currentPlayer.playerName}'s turn`);
     this.setCurrentPlayerState();
-    // this.currentPlayer.state = 'placeTile';
   }
-
-  //ActivityLogService
+  
   addInitialActivity() {
     this.activityLog.addLog('order', 'Order decide based on initial tiles');
     this.activityLog.addLog('tilePlaced', 'Initial tile placed');
     this.activityLog.addLog('turn', `${this.currentPlayer.playerName}'s turn`);
   }
 
-  //OrderService
   decideOrder() {
     const tiles = this.cluster.getRandomTiles(this.noOfPlayers);
     const tilePlayerPair = lodash.zip(tiles, this.players);
@@ -156,15 +155,13 @@ class Game {
     this.players = orderedPlayers;
   }
 
-  //ActivityService
   updateActivityForTilePlaced(tile) {
     const tileName = tileGenerator(tile);
     const name = this.currentPlayer.playerName;
     const activityMsg = `${name} placed ${tileName}. `;
     this.activityLog.addLog('tilePlaced', activityMsg);
   }
-
-  //PlayerService
+  
   canPlayerPlaceTile(tile, id) {
     this.setUnincorporatedGroups();
     const state = this.currentPlayer.state;
@@ -177,12 +174,10 @@ class Game {
     return getAdjacentCorporate(this.corporations, tile);
   }
 
-  //TileService
   getAdjacentPlacedTileList(tile) {
     return getAdjacentPlacedTileList(this.placedTiles, this.unincorporatedTiles, tile);
   }
 
-  //TileService
   manageTilePlacement(tile) {
     const adjacentCorp = this.getAdjacentCorporate(tile);
     const length = adjacentCorp.length;
@@ -196,7 +191,6 @@ class Game {
     return this.mergeCorporations(tile, adjacentCorp);
   }
 
-  //TileService
   isAnyUnplayableTile() {
     const tiles = this.currentPlayer.getStatus().assets.tiles;
     const unplayableTiles = tiles.filter(tile => {
@@ -210,8 +204,7 @@ class Game {
     this.unplayableTiles = unplayableTiles;
     return unplayableTiles;
   }
-
-  //ActivityLogService
+  
   updateActivityForReplaceUnplayableTiles(tiles) {
     const oldTilesNames = tiles.map(tileGenerator).join(',');
     const name = this.currentPlayer.playerName;
@@ -219,7 +212,6 @@ class Game {
     this.activityLog.addLog('replaceTile', msg);
   }
 
-  //TileService
   replaceTiles(tiles, playerId) {
     const hasUnplayableTile = lodash.isEqual(this.unplayableTiles, tiles);
     if (this.currentPlayer.getId === playerId && hasUnplayableTile) {
@@ -234,13 +226,11 @@ class Game {
     }
   }
 
-  //TileService
   placeNormalTile(tile) {
     this.placedTiles.push(tile);
     return true;
   }
 
-  //CorporateService
   getCorporateStocks(corporate) {
     return this.players.reduce((corporateStock, player) => {
       const stocks = player.getStocks(corporate);
@@ -251,7 +241,6 @@ class Game {
     }, []);
   }
 
-  //BonusService
   giveBonusToMaxStockHolders(bonus, stock, smallCorp) {
     const stockHolders = this.players.filter(player => {
       return player.stocks[smallCorp] === stock;
@@ -269,8 +258,7 @@ class Game {
     });
     this.activityLog.addLog('bonus', `${names.join(',')} ${msg}`);
   }
-
-  //BonusService
+  
   distributeMinority(minority, stock, smallCorp) {
     const stockHolders = this.players.filter(player => {
       return player.stocks[smallCorp] === stock;
@@ -288,7 +276,6 @@ class Game {
     this.activityLog.addLog('bonus', `${names.join(',')} ${msg}`);
   }
 
-  //BonusService
   giveBonusToStockHolders(bonus, stocks, smallCorp) {
     const [maxStocks, secondMaxStock] = stocks;
     const majorityHolder = this.players.find(player => {
@@ -301,8 +288,7 @@ class Game {
     this.activityLog.addLog('bonus', msg);
     this.distributeMinority(bonus.minority, secondMaxStock, smallCorp);
   }
-
-  //BonusService
+  
   distributeBonus(bonus, smallCorp) {
     const corporateStocks = this.getCorporateStocks(smallCorp);
     const stocks = getMaxAndSecondMaxNumbers(corporateStocks.slice());
@@ -313,7 +299,6 @@ class Game {
     this.giveBonusToStockHolders(bonus, stocks, smallCorp);
   }
   
-  // CorporationService
   mergeCorporations(tile, corporations) {
     const sortedCorp = getCorporationsInDescOrder(corporations);
     const [bigCorp, smallCorp] = sortedCorp;
@@ -330,15 +315,13 @@ class Game {
     }
     return isMerged;
   }
-
-  //ActivityLogService
+  
   updateActivityForMerge(bigCorp, smallCorp) {
     const mergeMaker = this.currentPlayer.playerName;
     const mergeMsg = `${mergeMaker} merged ${smallCorp} with ${bigCorp}`;
     this.activityLog.addLog('merge', mergeMsg);
   }
-
-  //CorporateService
+  
   checkCorpEstablishment() {
     const corpsLength = this.corporations.getInactiveCorporate().length;
     if (this.unincorporatedTiles.length > 0) {
@@ -350,8 +333,7 @@ class Game {
     }
     return false;
   }
-
-  //PlayerService
+  
   checkBuyStocks() {
     const corpsLength = this.corporations.getActiveCorporate().length;
     if (corpsLength > 0) {
@@ -360,13 +342,11 @@ class Game {
     this.changePlayerTurn();
     return true;
   }
-
-  //GameService
+  
   checkForState() {
     return this.checkCorpEstablishment() || this.checkBuyStocks();
   }
-  
-  //TileService
+
   placeATile(tile, playerId) {
     if (this.canPlayerPlaceTile(tile, playerId)) {
       const hasMerged = this.manageTilePlacement(tile);
@@ -381,19 +361,16 @@ class Game {
     }
     return false;
   }
-
-  //PlayerService
+  
   getPlayer(id) {
     return this.players.find(player => player.id === id);
   }
 
-  //AcitivyService
   updateActivityAfterEstablish(corporation) {
     const activityMsg = `${this.currentPlayer.name} established ${corporation}`;
     this.activityLog.addLog('establish', activityMsg);
   }
 
-  //corpService
   canPlayerEstablishCorp(tiles, corporation, playerId) {
     const isValidPlayer = this.currentPlayer.id === playerId;
     if (!isValidPlayer || !tiles) {
@@ -401,8 +378,7 @@ class Game {
     }
     return this.corporations.establishCorporate(corporation, tiles);
   }
-
-  //CoroporateSErvice
+  
   establishCorporation(tile, corporation, playerId) {
     const tiles = this.unincorporatedTiles.find(group => group.includes(tile));
     if (this.canPlayerEstablishCorp(tiles, corporation, playerId)) {
@@ -426,8 +402,7 @@ class Game {
       return true;
     }
   }
-
-  //playerService
+  
   getPlayerStatus(id) {
     for (let index = 0; index < this.noOfPlayers; index++) {
       if (this.players[index].getId === id) {
@@ -436,27 +411,23 @@ class Game {
     }
   }
 
-  //PlayerService
   getPlayerNames() {
     return this.players.map(player => player.playerName);
   }
-
-  //PlayerService
+  
   changePlayerState(state, msg) {
     this.currentPlayer.statusMsg = msg;
     this.currentPlayer.state = state;
     return true;
   }
-
-  //GameService
+  
   setUnincorporatedGroups() {
     this.unincorporatedTiles = this.placedTiles.reduce((groups, tile) => {
       groups.push(getAdjacentTiles(this.placedTiles.slice(), tile));
       return groups.reduce(getGroups, []);
     }, []);
   }
-
-  //GameService
+  
   getStateData(playerId) {
     const stateData = {
       'establish': {
@@ -477,7 +448,6 @@ class Game {
     return data;
   }
   
-  //GameService
   getStatus(playerId){
     return {
       status: {

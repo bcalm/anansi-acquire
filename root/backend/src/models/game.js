@@ -77,24 +77,6 @@ class Game {
     return this.started;
   }
   
-  setPlayerStateAsBuyStocks(state) {
-    if (state === 'establish' || state === 'no-corp') {
-      const msg = 'You can buy stocks';
-      this.changePlayerState('buyStocks', msg);
-    }
-  }
-  
-  skip(playerId) {
-    if (this.currentPlayer.id === playerId) {
-      const state = this.currentPlayer.state;
-      if (state === 'buyStocks') {
-        this.changePlayerTurn();
-      }
-      this.setPlayerStateAsBuyStocks(state);
-    }
-    return this.getStatus(playerId);
-  }
-  
   changePlayerTurn() {
     this.currentPlayer.addTile(this.cluster.getRandomTiles(1).pop());
     this.currentPlayer.toggleTurn();
@@ -378,7 +360,8 @@ class Game {
   getPlayerNames() {
     return this.players.map(player => player.playerName);
   }
-  
+
+  //4 usage
   changePlayerState(state, msg) {
     this.currentPlayer.statusMsg = msg;
     this.currentPlayer.state = state;
@@ -411,7 +394,8 @@ class Game {
     const data = { state, ...stateData[state] };
     return data;
   }
-  
+
+  //2 usage
   getStatus(playerId){
     return {
       status: {

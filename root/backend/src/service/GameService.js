@@ -77,6 +77,24 @@ class GameService {
   getStatus(playerId) {
     return this.game.getStatus(playerId);
   }
+
+  setPlayerStateAsBuyStocks(state) {
+    if (state === 'establish' || state === 'no-corp') {
+      const msg = 'You can buy stocks';
+      this.game.changePlayerState('buyStocks', msg);
+    }
+  }
+
+  skip(playerId) {
+    if (this.game.currentPlayer.id === playerId) {
+      const state = this.game.currentPlayer.state;
+      if (state === 'buyStocks') {
+        this.game.changePlayerTurn();
+      }
+      this.setPlayerStateAsBuyStocks(state);
+    }
+    return this.getStatus(playerId);
+  }
 }
 
 module.exports = GameService;

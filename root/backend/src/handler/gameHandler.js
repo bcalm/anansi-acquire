@@ -70,7 +70,8 @@ const getGameStatus = function(req, res) {
 
 const skipAction = function(req, res) {
   const id = req.player.playerId;
-  res.json(req.game.skip(id));
+  const gameService = new GameService(req.game);
+  res.json(gameService.skip(id));
 };
 
 const serveWaitStatus = function(req, res) {

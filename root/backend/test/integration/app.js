@@ -438,10 +438,10 @@ describe('POST', () => {
       it('should skip the establishing corporation', done => {
         app.locals.games = {
           123: {
+            currentPlayer: {id: 3},
             changePlayerTurn: () => {
             },
             getStatus: () => ({status: {player: {turn: true}}}),
-            skip: () => true
           }
         };
         app.locals.sessions = {
